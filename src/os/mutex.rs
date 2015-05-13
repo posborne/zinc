@@ -129,7 +129,6 @@ mod internal {
     }
   }
 
-  #[unsafe_destructor]
   impl<'a> Drop for Guard<'a> {
     #[inline]
     fn drop(&mut self) {
@@ -192,7 +191,6 @@ mod internal {
     }
   }
 
-  #[unsafe_destructor]
   impl<'a> Drop for Guard<'a> {
     #[inline]
     fn drop(&mut self) {
