@@ -108,7 +108,7 @@ fn build_new(cx: &ExtCtxt, path: &Vec<String>) -> P<ast::ImplItem> {
 
 /// Given an `Expr` of the given register's primitive type, return
 /// an `Expr` of the field type
-fn from_primitive(cx: &ExtCtxt, reg: &node::Reg,
+fn from_primitive(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
                   field: &node::Field, prim: P<ast::Expr>)
                   -> P<ast::Expr> {
   match field.ty.node {
@@ -116,7 +116,43 @@ fn from_primitive(cx: &ExtCtxt, reg: &node::Reg,
     node::FieldType::BoolField =>
       cx.expr_binary(DUMMY_SP, ast::BiNe,
                      prim, utils::expr_int(cx, 0)),
-    node::FieldType::EnumField {..} => {
+    node::FieldType::EnumField {opt_name: _, variants: ref vars} => {
+      let mut arms: Vec<ast::Arm> = Vec::new();
+      for v in vars.iter() {
+          let mut name = path.clone();
+          name.push(field.name.node.clone());
+          let enum_ident = cx.ident_of(name.connect("_").as_str());
+          let val_ident = cx.ident_of(v.name.node.as_str());
+          let body = cx.expr_path(
+              cx.path(DUMMY_SP, vec!(enum_ident, val_ident)));
+          let val: u64 = v.value.node;
+          let lit = cx.expr_lit(
+              DUMMY_SP,
+              ast::LitInt(val, ast::UnsuffixedIntLit(ast::Plus)));
+          let arm = ast::Arm {
+              attrs: vec!(),
+              pats: vec!(
+                  P(ast::Pat {
+                      id: ast::DUMMY_NODE_ID,
+                      span: DUMMY_SP,
+                      node: ast::PatLit(lit),
+                  })
+                ),
+              guard: None,
+              body: body,
+          };
+          arms.push(arm);
+      }
+      let opt_expr = cx.expr_match(
+          DUMMY_SP,
+          prim,
+          arms);
+      cx.expr_method_call(
+          DUMMY_SP,
+          opt_expr,
+          cx.ident_of("unwrap"),
+          Vec::new())
+      /*
       let from = match reg.ty {
         node::RegType::RegPrim(ref width,_) =>
           match width {
@@ -138,6 +174,7 @@ fn from_primitive(cx: &ExtCtxt, reg: &node::Reg,
         cx.ident_of("unwrap"),
         Vec::new()
       )
+      */
     },
   }
 }
@@ -194,7 +231,7 @@ fn build_field_get_fn(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
   if field.count.node == 1 {
     let shift = utils::shift(cx, None, field);
     let value = from_primitive(
-      cx, reg, field,
+      cx, path, reg, field,
       quote_expr!(cx, (self.value >> $shift) & $mask));
     utils::unwrap_impl_item(quote_item!(cx,
       impl X {
@@ -207,7 +244,7 @@ fn build_field_get_fn(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
   } else {
     let shift = utils::shift(cx, Some(quote_expr!(cx, idx)), field);
     let value = from_primitive(
-      cx, reg, field,
+      cx, path, reg, field,
       quote_expr!(cx, (self.value >> $shift) & $mask));
     utils::unwrap_impl_item(quote_item!(cx,
       impl X {
