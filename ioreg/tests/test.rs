@@ -75,6 +75,24 @@ mod test {
       assert_eq!(get_value(&test, 0), 0xde<<16);
   }
 
+  #[test]
+  fn set_set_to_clear_fields() {
+      let test: BASIC_TEST = zeroed_safe();
+
+      test.reg1.clear_field4();
+      assert_eq!(get_value(&test, 0), 1<<25);
+  }
+
+  #[test]
+  fn no_read_writeonly_registers() {
+      let test: BASIC_TEST = zeroed_safe();
+
+      test.wo_reg.set_field1(0xdead);
+      assert_eq!(get_value(&test, 2), 0xdead);
+      test.wo_reg.set_field2(0xdead);
+      assert_eq!(get_value(&test, 2), 0xdead<<16);
+  }
+
   /*
   describe!(
     before_each {
@@ -106,6 +124,7 @@ mod test {
       assert_eq!(get_value(&test, 2), 0xdead<<16);
     }
   );
+  */
 
   ioregs!(GROUP_TEST = {
     0x0 => group regs[5] {
@@ -118,6 +137,22 @@ mod test {
     }
   });
 
+  #[test]
+  fn sets_groups_correctly() {
+      let test: GROUP_TEST = zeroed_safe();
+      test.regs[0].reg1.set_field1(0xdeadbeef);
+      assert_eq!(test.regs[0].reg1.field1(), 0xdeadbeef);
+      assert_eq!(get_value(&test, 0), 0xdeadbeef);
+      for i in 1..10 {
+        assert_eq!(get_value(&test, i), 0);
+      }
+
+      test.regs[2].reg2.set_field2(0xfeedbeef);
+      assert_eq!(test.regs[2].reg2.field2(), 0xfeedbeef);
+      assert_eq!(get_value(&test, 5), 0xfeedbeef);
+  }
+
+  /*
   describe!(
     before_each {
       let test: GROUP_TEST = zeroed_safe();
@@ -136,6 +171,7 @@ mod test {
       assert_eq!(get_value(&test, 5), 0xfeedbeef);
     }
   );
+  */
 
   ioregs!(FIELD_ARRAY_TEST = {
     0x0 => reg32 reg1 {
@@ -143,6 +179,19 @@ mod test {
     }
   });
 
+  #[test]
+  fn sets_field_arrays_correctly() {
+      let test: FIELD_ARRAY_TEST = zeroed_safe();
+      test.reg1.set_field(0, 1);
+      assert_eq!(test.reg1.field(0), 1);
+      assert_eq!(get_value(&test, 0), 0x1);
+
+      test.reg1.set_field(4, 3);
+      assert_eq!(test.reg1.field(4), 3);
+      assert_eq!(get_value(&test, 0), 0x1 | 0x3<<8);
+  }
+
+  /*
   describe!(
     before_each {
       let test: FIELD_ARRAY_TEST = zeroed_safe();
@@ -158,6 +207,7 @@ mod test {
       assert_eq!(get_value(&test, 0), 0x1 | 0x3<<8);
     }
   );
+  */
 
   ioregs!(GAP_TEST = {
     0x0 => reg32 reg1 {
@@ -174,6 +224,31 @@ mod test {
     }
   });
 
+  #[test]
+  fn has_zero_base_offset() {
+    let test: GAP_TEST = zeroed_safe();
+    let base = &test as *const GAP_TEST;
+    let addr = &test.reg1 as *const GAP_TEST_reg1;
+    assert_eq!(addr as usize - base as usize, 0x0);
+  }
+
+  #[test]
+  fn computes_first_gap() {
+    let test: GAP_TEST = zeroed_safe();
+    let base = &test as *const GAP_TEST;
+    let addr = &test.reg2 as *const GAP_TEST_reg2;
+    assert_eq!(addr as usize - base as usize, 0x10);
+  }
+
+  #[test]
+  fn computes_second_gap() {
+    let test: GAP_TEST = zeroed_safe();
+    let base = &test as *const GAP_TEST;
+    let addr = &test.reg4 as *const GAP_TEST_reg4;
+    assert_eq!(addr as usize - base as usize, 0x20);
+  }
+
+  /*
   describe!(
     before_each {
       let test: GAP_TEST = zeroed_safe();
