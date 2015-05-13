@@ -56,6 +56,7 @@ mod test {
     }
   });
 
+  /*
   #[test]
   fn round_trip_simple_field_values_1() {
       let test: BASIC_TEST = zeroed_safe();
@@ -74,6 +75,7 @@ mod test {
       assert_eq!(test.reg1.field3(), 0xde);
       assert_eq!(get_value(&test, 0), 0xde<<16);
   }
+  */
 
   /*
   describe!(

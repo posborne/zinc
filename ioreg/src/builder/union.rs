@@ -179,6 +179,8 @@ impl<'a> BuildUnionTypes<'a> {
       ctor_id: None,
     };
     let mut attrs: Vec<ast::Attribute> = vec!(
+      utils::list_attribute(self.cx, "derive",
+                            vec!("Clone")),
       utils::list_attribute(self.cx, "allow",
                             vec!("non_camel_case_types",
                                  "dead_code",

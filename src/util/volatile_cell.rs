@@ -20,11 +20,10 @@ use core::intrinsics::{volatile_load, volatile_store};
 
 /// This structure is used to represent a hardware register.
 /// It is mostly used by the ioreg family of macros.
+#[derive(Clone, Copy)]
 pub struct VolatileCell<T> {
   value: T,
 }
-
-impl<T: Copy> Copy for VolatileCell<T> {}
 
 impl<T> VolatileCell<T> {
   /// Create a cell with initial value.
