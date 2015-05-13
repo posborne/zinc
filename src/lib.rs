@@ -14,8 +14,6 @@
 // limitations under the License.
 
 #![feature(asm, unsafe_destructor, lang_items, plugin, core)]
-#![crate_name="zinc"]
-#![crate_type="rlib"]
 #![allow(improper_ctypes)]
 #![deny(missing_docs)]
 #![no_std]

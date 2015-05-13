@@ -1,0 +1,7 @@
+[package]
+name = "zinc"
+version = "0.1.0"
+authors = ["Zinc Developers <zinc@github.com>"]
+
+[dependencies.ioreg]
+path = "./ioreg"

@@ -17,9 +17,6 @@
 
 #![feature(quote, rustc_private, collections, core, alloc, unicode, hash)]
 
-#![crate_name="platformtree"]
-#![crate_type="rlib"]
-
 // extern crate regex;
 extern crate syntax;
 #[cfg(test)] extern crate hamcrest;

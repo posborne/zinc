@@ -328,8 +328,6 @@ N => NAME
 */
 
 #![feature(quote, plugin_registrar, rustc_private, collections, core)]
-#![crate_name="ioreg"]
-#![crate_type="dylib"]
 
 extern crate rustc;
 extern crate syntax;
