@@ -29,11 +29,10 @@ pub mod clock {
   //! Clock tree configuration
   use core::option::Option;
   use core::option::Option::{Some, None};
-  use core::num::from_u32;
 
   /// Clock sources available on the system. The values are the RCC/RCC2 OSCSRC
   /// field encoding.
-  #[derive(PartialEq, FromPrimitive)]
+  #[derive(PartialEq)]
   pub enum ClockSource {
     /// The Main Oscillator, external crystal/oscillator on OSC pins.
     /// The possible frequencies are listed in MOSCSource.
@@ -52,7 +51,7 @@ pub mod clock {
   /// The chip supports a finite list of crystal frequencies for the MOSC, each
   /// having its own ID used to configure the PLL to output 400MHz.
   #[allow(missing_docs, non_camel_case_types)]
-  #[derive(FromPrimitive, Copy)]
+  #[derive(Copy)]
   pub enum MOSCFreq {
     X5_0MHz    = 0x09,
     X5_12MHz   = 0x0A,
@@ -71,6 +70,32 @@ pub mod clock {
     X18MHz     = 0x17,
     X20MHz     = 0x18,
     X24MHz     = 0x19,
+  }
+
+  impl MOSCFreq {
+      pub fn from_u32(v: u32) -> Option<MOSCFreq> {
+          use self::*;
+
+          match v {
+              0x09 => Some(MOSCFreq::X5_0MHz),
+              0x0A => Some(MOSCFreq::X5_12MHz),
+              0x0B => Some(MOSCFreq::X6_0MHz),
+              0x0C => Some(MOSCFreq::X6_144MHz),
+              0x0D => Some(MOSCFreq::X7_3728MHz),
+              0x0D => Some(MOSCFreq::X8_0MHz),
+              0x0D => Some(MOSCFreq::X8_192MHz),
+              0x0D => Some(MOSCFreq::X10_0MHz),
+              0x0D => Some(MOSCFreq::X12_0MHz),
+              0x0D => Some(MOSCFreq::X12_288MHz),
+              0x0D => Some(MOSCFreq::X13_56MHz),
+              0x0D => Some(MOSCFreq::X14_318MHz),
+              0x0D => Some(MOSCFreq::X16_0MHz),
+              0x0D => Some(MOSCFreq::X16_384MHz),
+              0x0D => Some(MOSCFreq::X18MHz),
+              0x0D => Some(MOSCFreq::X20MHz),
+              0x0D => Some(MOSCFreq::X24MHz),
+          }
+      }
   }
 
   /// Configure the System Clock by setting the clock source and divisors.
@@ -165,9 +190,13 @@ pub mod clock {
       false => rcc.oscsrc(),
     };
 
-    let clock_source = match from_u32::<ClockSource>(oscsrc) {
-      Some(src) => src,
-      None      => panic!("Unknown clock source"),
+    let clock_source = match oscsrc {
+        0 => ClockSource::MOSC,
+        1 => ClockSource::PIOSC,
+        2 => ClockSource::PIOSC4MHz,
+        3 => ClockSource::LFIOSC,
+        7 => ClockSource::HOSC,
+        _ => panic!("Unknown clock source"),
     };
 
     let input_freq = match clock_source {
@@ -178,7 +207,7 @@ pub mod clock {
       ClockSource::MOSC      => {
         // We're running from the external clock source, we need to figure out
         // what crystal we're using
-        let crystal = match from_u32::<MOSCFreq>(rcc.xtal()) {
+        let crystal = match MOSCFreq::from_u32(rcc.xtal()) {
           Some(c) => c,
           None    => panic!("Unknown crystal"),
         };
@@ -253,9 +282,6 @@ impl Copy for clock::ClockSource {}
 pub mod periph {
   //! peripheral system control
 
-  use core::iter::range;
-  use core::ptr::PtrExt;
-
   /// Sysctl can reset/clock gate each module, as well as set various sleep and
   /// deep-sleep mode behaviour.
   #[derive(Copy)]
@@ -293,7 +319,7 @@ pub mod periph {
       // maybe because we also have to take the bus write time into account or
       // the CPU is more clever than I think. Anyway, looping 5 times seems to
       // work
-      for _ in range(0usize, 10) {
+      for _ in 0..10 {
         unsafe {
           asm!("nop" :::: "volatile");
         }

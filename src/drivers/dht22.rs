@@ -15,7 +15,6 @@
 
 //! Driver for DHT22.
 
-use core::iter::range;
 use core::option::Option::{self, Some, None};
 
 use hal::pin::Gpio;
@@ -66,7 +65,7 @@ impl<'a, T: Timer, P: Gpio> DHT22<'a, T, P> {
       return None
     }
 
-    for _ in range(0usize, 40) {
+    for _ in 0..40 {
       if !self.wait_while(Low, 80) {
         return None
       }
@@ -117,7 +116,7 @@ impl<'a, T: Timer, P: Gpio> DHT22<'a, T, P> {
   }
 
   fn wait_while(&self, level: GpioLevel, timeout: usize) -> bool {
-    for _ in range(0, timeout / 10) {
+    for _ in 0..(timeout / 10) {
       self.timer.wait_us(10);
       if self.gpio.level() != level {
         return true;

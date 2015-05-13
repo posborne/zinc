@@ -15,7 +15,7 @@
 
 //! Drivers for TFT LCDs.
 
-use core::iter::{range, range_inclusive};
+use core::iter::range_inclusive;
 
 use drivers::chario::CharIO;
 
@@ -147,8 +147,8 @@ pub trait LCD : CharIO {
 
   /// Draws an image from a buffer.
   fn image(&self, width: u32, height: u32, data: &[u16]) {
-    for x in range(0, width) {
-      for y in range(0, height) {
+    for x in 0..width {
+      for y in 0..height {
         self.pixel(x, y, data[(x+y*width) as usize]);
       }
     }
@@ -158,7 +158,6 @@ pub trait LCD : CharIO {
 #[cfg(test)]
 mod test {
   use core::mem::zeroed;
-  use core::iter::{Range, range};
   use core::cell::Cell;
   use core::ops::Fn;
 
@@ -196,7 +195,7 @@ mod test {
 
     fn coords(&self, x: usize, y: usize) -> (u32, u32) { (x as u32, y as u32) }
 
-    fn axis(&self) -> Range<usize> { range(0, 16) }
+    fn axis(&self) -> Range<usize> { 0..16 }
 
     fn for_each<F>(&self, block: F) where F: Fn((u32, u32), u16) {
       for x in self.axis() {

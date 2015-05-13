@@ -15,8 +15,6 @@
 
 //! Driver for the ILI9341 LCD.
 
-use core::iter::range;
-
 use super::LCD;
 use drivers::chario::CharIO;
 use hal::timer::Timer;
@@ -83,7 +81,7 @@ impl<'a, S: Spi, T: Timer, P: Gpio> ILI9341<'a, S, T, P> {
     let mut data: [u8; 3] = [0, 0, 0];
     let id: [u8; 3] = [0x00, 0x93, 0x41];
 
-    for i in range(0, 3) {
+    for i in 0 .. 3 {
       data[i] = self.read_register(0xd3, (i+1) as u8);
       if data[i] != id[i] {
         return false;
@@ -278,7 +276,7 @@ impl<'a, S: Spi, T: Timer, P: Gpio> ILI9341<'a, S, T, P> {
 
     self.dc.set_high();
     self.cs.set_low();
-    for _ in range(0usize, 38400) {
+    for _ in 0..38400 {
       self.spi.transfer(0);
       self.spi.transfer(0);
       self.spi.transfer(0);

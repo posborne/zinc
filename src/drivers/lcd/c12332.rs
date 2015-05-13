@@ -26,7 +26,6 @@ might be an issue for any other peripheral sharing the same SPI bus.
 use core::cell;
 use core::slice::SliceExt;
 use core::mem::zeroed;
-use core::iter::range;
 
 use super::font_small_7;
 use super::LCD;
@@ -164,8 +163,8 @@ impl<'a, S: Spi, T: Timer, P: Gpio> C12332<'a, S, T, P> {
     // zeichen = &self.font[]; // start of char bitmap
     let w = zeichen[0];                          // width of actual char
     // construct the char into the buffer
-    for j in range(0, vert) {
-      for i in range(0, hor) {
+    for j in 0..vert {
+      for i in 0..hor {
         let z: u8 =  zeichen[(bpl * i + ((j & 0xF8) >> 3)+1) as usize];
         let b: u8 = 1 << ((j & 0x07) as usize);
         if ( z & b ) == 0x00 {
@@ -229,7 +228,7 @@ impl<'a, S: Spi, T: Timer, P: Gpio> LCD for C12332<'a, S, T, P> {
   }
 
   fn clear(&self) {
-    for i in range(0usize, 512) {
+    for i in 0 .. 512 {
       self.videobuf[i].set(0);
     }
   }
