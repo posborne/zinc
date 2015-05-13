@@ -359,7 +359,7 @@ pub fn macro_ioregs(cx: &mut ExtCtxt, _: Span, tts: &[ast::TokenTree])
       MacItems::new(items)
     },
     None => {
-      panic!();
+      panic!("Parsing failed");
     }
   }
 }

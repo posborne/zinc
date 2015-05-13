@@ -16,11 +16,11 @@
 //! Tests for ioreg! syntax extension
 
 #![feature(core, plugin)]
-#![plugin(ioreg, shiny)]
+#![plugin(ioreg)]
 
 extern crate core;
 
-#[path="../zinc/util/volatile_cell.rs"] mod volatile_cell;
+#[path="../../src/util/volatile_cell.rs"] mod volatile_cell;
 
 #[cfg(test)]
 mod test {
@@ -57,6 +57,26 @@ mod test {
     }
   });
 
+  #[test]
+  fn round_trip_simple_field_values_1() {
+      let test: BASIC_TEST = zeroed_safe();
+
+      test.reg1.set_field1(true);
+      assert_eq!(test.reg1.field1(), true);
+      assert_eq!(get_value(&test, 0), 1);
+      assert_eq!(get_value(&test, 1), 0);
+  }
+
+  #[test]
+  fn round_trip_simple_field_values_2() {
+      let test: BASIC_TEST = zeroed_safe();
+
+      test.reg1.set_field3(0xde);
+      assert_eq!(test.reg1.field3(), 0xde);
+      assert_eq!(get_value(&test, 0), 0xde<<16);
+  }
+
+  /*
   describe!(
     before_each {
       let test: BASIC_TEST = zeroed_safe();
@@ -173,4 +193,5 @@ mod test {
       assert_eq!(addr as usize - base as usize, 0x20);
     }
   );
+  */
 }
