@@ -94,8 +94,6 @@ fn build_new<'a>(cx: &'a ExtCtxt, path: &Vec<String>)
   let reg_ty: P<ast::Ty> =
     cx.ty_ident(DUMMY_SP, utils::path_ident(cx, path));
   let setter_ident = utils::setter_name(cx, path);
-  let setter_ty: P<ast::Ty> = cx.ty_ident(DUMMY_SP,
-                                          setter_ident);
   utils::unwrap_impl_item(quote_item!(cx,
     impl<'a> $setter_ident<'a> {
         #[doc="Create a new updater"]
@@ -114,8 +112,6 @@ fn build_drop(cx: &ExtCtxt, path: &Vec<String>,
     reg: &node::Reg, fields: &Vec<node::Field>) -> P<ast::Item>
 {
   let setter_ident = utils::setter_name(cx, path);
-  let setter_ty: P<ast::Ty> = cx.ty_ident(DUMMY_SP,
-                                          setter_ident);
   let unpacked_ty = utils::reg_primitive_type(cx, reg)
     .expect("Unexpected non-primitive register");
 
@@ -144,6 +140,11 @@ fn build_drop(cx: &ExtCtxt, path: &Vec<String>,
     #[doc = "This performs the register update"]
     impl<'a> Drop for $setter_ident<'a> {
       fn drop(&mut self) {
+          let clear_mask: $unpacked_ty = $clear as $unpacked_ty;
+          if self.mask != 0 {
+              let v: $unpacked_ty = $initial_value & ! clear_mask & ! self.mask;
+              self.reg.value.set(self.value | v);
+          }
       }
     }
   );
@@ -165,9 +166,6 @@ fn build_impl(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
 {
   let new = build_new(cx, path);
   let setter_ident = utils::setter_name(cx, path);
-  let setter_ty: P<ast::Ty> = cx.ty_ident(
-    DUMMY_SP,
-    setter_ident);
   let methods: Vec<P<ast::ImplItem>> =
     FromIterator::from_iter(
       fields.iter()

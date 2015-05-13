@@ -93,8 +93,6 @@ fn build_new(cx: &ExtCtxt, path: &Vec<String>) -> P<ast::ImplItem> {
   let getter_ident = utils::getter_name(cx, path);
   let getter_ty: P<ast::Ty> = cx.ty_ident(DUMMY_SP,
                                           getter_ident);
-  let getter_path: ast::Path = cx.path_ident(DUMMY_SP,
-                                             getter_ident);
   let item = quote_item!(cx,
     impl $getter_ty {
         #[doc = "Create a getter reflecting the current value of the given register."]
