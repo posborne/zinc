@@ -6,3 +6,6 @@ authors = ["Zinc Developers <zinc@github.com>"]
 [dependencies.ioreg]
 path = "./ioreg"
 target = "x86_64-apple-darwin"
+
+[dependencies.rlibc]
+version = "*"
