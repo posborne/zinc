@@ -108,6 +108,15 @@ pub fn field_type_path(cx: &ExtCtxt, path: &Vec<String>,
   }
 }
 
+pub fn unwrap_impl_item(item: P<ast::Item>) -> P<ast::ImplItem> {
+    match item.node {
+        ast::ItemImpl(_, _, _, _, _, ref items) => {
+            items.clone().pop().expect("ImplItem not found")
+        },
+        _ => panic!("Tried to unwrap ImplItem from Non-Impl")
+    }
+}
+
 /// Build an expression for the mask of a field
 pub fn mask(cx: &ExtCtxt, field: &node::Field) -> P<ast::Expr> {
   expr_int(cx, ((1 << field.width as u64) - 1))

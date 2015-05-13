@@ -76,6 +76,7 @@ fn build_type(cx: &ExtCtxt, path: &Vec<String>,
 
   let item = quote_item!(cx,
     $doc_attr
+    #[derive(Clone)]
     #[allow(non_camel_case_types)]
     pub struct $name {
       value: $packed_ty,
@@ -86,20 +87,25 @@ fn build_type(cx: &ExtCtxt, path: &Vec<String>,
   P(item)
 }
 
-fn build_new(cx: &ExtCtxt, path: &Vec<String>) -> P<ast::Item> {
+fn build_new(cx: &ExtCtxt, path: &Vec<String>) -> P<ast::ImplItem> {
   let reg_ty: P<ast::Ty> =
     cx.ty_ident(DUMMY_SP, utils::path_ident(cx, path));
+  let getter_ident = utils::getter_name(cx, path);
   let getter_ty: P<ast::Ty> = cx.ty_ident(DUMMY_SP,
-                                          utils::getter_name(cx, path));
+                                          getter_ident);
+  let getter_path: ast::Path = cx.path_ident(DUMMY_SP,
+                                             getter_ident);
   let item = quote_item!(cx,
-    #[doc = "Create a getter reflecting the current value of the given register."]
-    pub fn new(reg: & $reg_ty) -> $getter_ty {
-      $getter_ty {
-        value: reg.value.get(),
-      }
+    impl $getter_ty {
+        #[doc = "Create a getter reflecting the current value of the given register."]
+        pub fn new(reg: & $reg_ty) -> $getter_ty {
+            $getter_ident {
+                value: reg.value.get(),
+            }
+        }
     }
-    );
-  item.unwrap()
+    ).unwrap();
+  utils::unwrap_impl_item(item)
 }
 
 /// Given an `Expr` of the given register's primitive type, return
@@ -142,34 +148,37 @@ fn build_impl(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
               fields: &Vec<node::Field>) -> P<ast::Item> {
   let getter_ty = utils::getter_name(cx, path);
   let new = build_new(cx, path);
-  let getters: Vec<P<ast::Item>> =
+  let getters: Vec<P<ast::ImplItem>> =
     FromIterator::from_iter(
       fields.iter()
         .map(|field| build_field_get_fn(cx, path, reg, field)));
 
   let packed_ty = utils::reg_primitive_type(cx, reg)
     .expect("Unexpected non-primitive register");
-  let get_raw: P<ast::Item> = quote_item!(cx,
-    #[doc = "Get the raw value of the register."]
-    pub fn raw(&self) -> $packed_ty {
-      self.value
+  let get_raw: P<ast::ImplItem> = utils::unwrap_impl_item(quote_item!(cx,
+    impl $getter_ty {
+        #[doc = "Get the raw value of the register."]
+        pub fn raw(&self) -> $packed_ty {
+            self.value
+        }
     }
-  ).unwrap();
+  ).unwrap());
 
   let it = quote_item!(cx,
-    #[allow(dead_code)]
     impl $getter_ty {
-      $new
-      $getters
-      $get_raw
+        $new
+        $getters
+        $get_raw
     }
   );
-  it.unwrap()
+  let mut item: ast::Item = it.unwrap().deref().clone();
+  item.span = reg.name.span;
+  P(item)
 }
 
 /// Build a getter for a field
 fn build_field_get_fn(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
-                      field: &node::Field) -> P<ast::Item>
+                      field: &node::Field) -> P<ast::ImplItem>
 {
   let fn_name = cx.ident_of(field.name.node.as_str());
   let field_ty: P<ast::Ty> =
@@ -189,22 +198,26 @@ fn build_field_get_fn(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
     let value = from_primitive(
       cx, reg, field,
       quote_expr!(cx, (self.value >> $shift) & $mask));
-    quote_item!(cx,
-      $doc_attr
-      pub fn $fn_name(&self) -> $field_ty {
-        $value
+    utils::unwrap_impl_item(quote_item!(cx,
+      impl X {
+        $doc_attr
+        pub fn $fn_name(&self) -> $field_ty {
+            $value
+        }
       }
-    ).unwrap()
+    ).unwrap())
   } else {
     let shift = utils::shift(cx, Some(quote_expr!(cx, idx)), field);
     let value = from_primitive(
       cx, reg, field,
       quote_expr!(cx, (self.value >> $shift) & $mask));
-    quote_item!(cx,
-      $doc_attr
-      pub fn $fn_name(&self, idx: usize) -> $field_ty {
-        $value
+    utils::unwrap_impl_item(quote_item!(cx,
+      impl X {
+        $doc_attr
+        pub fn $fn_name(&self, idx: usize) -> $field_ty {
+            $value
+        }
       }
-    ).unwrap()
+    ).unwrap())
   }
 }
