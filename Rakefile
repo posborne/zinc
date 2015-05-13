@@ -20,8 +20,8 @@ compile_rust :shiny_crate, {
 }
 
 compile_rust :hamcrest_crate, {
-  source:  'thirdparty/hamcrest-rust/src/hamcrest/lib.rs'.in_root,
-  produce: 'thirdparty/hamcrest-rust/src/hamcrest/lib.rs'.in_root.as_rlib.in_build,
+  source:  'thirdparty/hamcrest-rust/src/lib.rs'.in_root,
+  produce: 'thirdparty/hamcrest-rust/src/lib.rs'.in_root.as_rlib.in_build,
   out_dir: true,
   build_for: :host,
   do_not_collect_rust_deps: true,
