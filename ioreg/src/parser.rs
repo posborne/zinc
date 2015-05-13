@@ -143,11 +143,11 @@ impl<'a> Parser<'a> {
         self.sess.span_diagnostic.span_err(
           r1.name.span,
           format!("The byte range of register ({} to {})",
-                  r1.offset, r1.last_byte()).as_slice());
+                  r1.offset, r1.last_byte()).as_str());
         self.sess.span_diagnostic.span_err(
           r2.name.span,
           format!("overlaps with the range of this register ({} to {})",
-                  r2.offset, r2.last_byte()).as_slice());
+                  r2.offset, r2.last_byte()).as_str());
         failed = true;
       }
     }
@@ -216,10 +216,10 @@ impl<'a> Parser<'a> {
             for (f1,f2) in fields.iter().zip(fields.iter().skip(1)) {
               if f2.low_bit <= f1.high_bit() {
                 self.sess.span_diagnostic.span_err(
-                  f1.bit_range_span, "The bit range of this field,".as_slice());
+                  f1.bit_range_span, "The bit range of this field,");
                 self.sess.span_diagnostic.span_err(
                   f2.bit_range_span,
-                  "overlaps with the bit range of this field".as_slice());
+                  "overlaps with the bit range of this field");
                 return None;
               }
             }
@@ -230,7 +230,7 @@ impl<'a> Parser<'a> {
                 self.sess.span_diagnostic.span_err(
                   name.span,
                   format!("Width of fields ({} bits) exceeds access size of register ({} bits)",
-                           last_bit+1, 8*width.size()).as_slice());
+                           last_bit+1, 8*width.size()).as_str());
                 return None;
               },
               _ => {}
@@ -345,7 +345,7 @@ impl<'a> Parser<'a> {
             self.sess.span_diagnostic.span_err(
               mk_sp(bits_span.lo, self.last_span.hi),
               format!("Bit width ({}) not divisible by count ({})",
-                      w, count.node).as_slice());
+                      w, count.node).as_str());
             return None;
           }
         },
@@ -506,7 +506,7 @@ impl<'a> Parser<'a> {
       }
     }
     let string = docs.connect("\n");
-    let string = string.as_slice().trim();
+    let string = string.as_str().trim();
     if !string.is_empty() {
       Some(respan(self.last_span, self.cx.ident_of(string)))
     } else {
@@ -568,7 +568,7 @@ impl<'a> Parser<'a> {
   }
 
   fn error(&self, m: String) {
-    self.sess.span_diagnostic.span_err(self.span, m.as_slice());
+    self.sess.span_diagnostic.span_err(self.span, m.as_str());
   }
 
   /// Bumps a token.

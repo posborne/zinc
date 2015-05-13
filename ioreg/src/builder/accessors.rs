@@ -124,83 +124,83 @@ fn build_get_fn(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg)
 
 fn build_field_set_fn(cx: &ExtCtxt, path: &Vec<String>,
                       reg: &node::Reg, field: &node::Field)
-                      -> P<ast::Method>
+                      -> P<ast::Item>
 {
   let fn_name =
-    cx.ident_of((String::from_str("set_")+field.name.node.as_slice()).as_slice());
+    cx.ident_of((String::from_str("set_")+field.name.node.as_str()).as_str());
   let field_ty: P<ast::Ty> =
     cx.ty_path(utils::field_type_path(cx, path, reg, field));
   let setter_ty = utils::setter_name(cx, path);
   if field.count.node == 1 {
-    quote_method!(cx,
+    quote_item!(cx,
       #[allow(dead_code, missing_docs)]
       pub fn $fn_name<'a>(&'a self, new_value: $field_ty) -> $setter_ty<'a> {
         let mut setter: $setter_ty = $setter_ty::new(self);
         setter.$fn_name(new_value);
         setter
       }
-    )
+    ).unwrap()
   } else {
-    quote_method!(cx,
+    quote_item!(cx,
       #[allow(dead_code, missing_docs)]
       pub fn $fn_name<'a>(&'a self, idx: usize, new_value: $field_ty) -> $setter_ty<'a> {
         let mut setter: $setter_ty = $setter_ty::new(self);
         setter.$fn_name(idx, new_value);
         setter
       }
-    )
+    ).unwrap()
   }
 }
 
 fn build_field_get_fn(cx: &ExtCtxt, path: &Vec<String>,
                       reg: &node::Reg, field: &node::Field)
-                      -> P<ast::Method>
+                      -> P<ast::Item>
 {
-  let fn_name = cx.ident_of(field.name.node.as_slice());
+  let fn_name = cx.ident_of(field.name.node.as_str());
   let field_ty: P<ast::Ty> =
     cx.ty_path(utils::field_type_path(cx, path, reg, field));
   let getter_ty = utils::getter_name(cx, path);
   if field.count.node == 1 {
-    quote_method!(cx,
+    quote_item!(cx,
       #[allow(dead_code, missing_docs)]
       pub fn $fn_name(&self) -> $field_ty {
         $getter_ty::new(self).$fn_name()
       }
-    )
+    ).unwrap()
   } else {
-    quote_method!(cx,
+    quote_item!(cx,
       #[allow(dead_code, missing_docs)]
       pub fn $fn_name(&self, idx: usize) -> $field_ty {
         $getter_ty::new(self).$fn_name(idx)
       }
-    )
+    ).unwrap()
   }
 }
 
 fn build_field_clear_fn(cx: &ExtCtxt, path: &Vec<String>,
                         _reg: &node::Reg, field: &node::Field)
-                        -> P<ast::Method>
+                        -> P<ast::Item>
 {
   let fn_name =
-    cx.ident_of((String::from_str("clear_")+field.name.node.as_slice()).as_slice());
+    cx.ident_of((String::from_str("clear_")+field.name.node.as_str()).as_str());
   let setter_ty = utils::setter_name(cx, path);
   if field.count.node == 1 {
-    quote_method!(cx,
+    quote_item!(cx,
       #[allow(dead_code, missing_docs)]
       pub fn $fn_name<'a>(&'a self) -> $setter_ty<'a> {
         let mut setter: $setter_ty = $setter_ty::new(self);
         setter.$fn_name();
         setter
       }
-    )
+    ).unwrap()
   } else {
-    quote_method!(cx,
+    quote_item!(cx,
       #[allow(dead_code, missing_docs)]
       pub fn $fn_name<'a>(&'a self, idx: usize) -> $setter_ty<'a> {
         let mut setter: $setter_ty = $setter_ty::new(self);
         setter.$fn_name(idx);
         setter
       }
-    )
+    ).unwrap()
   }
 }

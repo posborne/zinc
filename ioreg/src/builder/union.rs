@@ -87,7 +87,7 @@ impl<'a> BuildUnionTypes<'a> {
 }
 
 fn expr_u64(cx: &ExtCtxt, n: u64) -> P<ast::Expr> {
-  cx.expr_lit(DUMMY_SP, ast::LitInt(n as u64, ast::UnsignedIntLit(ast::TyUs(false))))
+  cx.expr_lit(DUMMY_SP, ast::LitInt(n as u64, ast::UnsignedIntLit(ast::TyUs)))
 }
 
 /// Returns the type of the field representing the given register
@@ -128,7 +128,7 @@ impl<'a> BuildUnionTypes<'a> {
     dummy_spanned(
       ast::StructField_ {
         kind: ast::NamedField(
-          self.cx.ident_of(reg.name.node.as_slice()),
+          self.cx.ident_of(reg.name.node.as_str()),
           ast::Public),
         id: ast::DUMMY_NODE_ID,
         ty: reg_struct_type(self.cx, &field_path, reg),
@@ -154,7 +154,7 @@ impl<'a> BuildUnionTypes<'a> {
         dummy_spanned(
           ast::StructField_ {
             kind: ast::NamedField(
-              self.cx.ident_of(format!("_pad{}", index).as_slice()),
+              self.cx.ident_of(format!("_pad{}", index).as_str()),
               ast::Inherited),
             id: ast::DUMMY_NODE_ID,
             ty: ty,

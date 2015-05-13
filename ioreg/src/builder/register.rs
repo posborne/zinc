@@ -140,7 +140,7 @@ fn build_enum_variant(cx: &ExtCtxt, variant: &node::Variant)
   respan(
     mk_sp(variant.name.span.lo, variant.value.span.hi),
     ast::Variant_ {
-      name: cx.ident_of(variant.name.node.as_slice()),
+      name: cx.ident_of(variant.name.node.as_str()),
       attrs: vec!(doc_attr),
       kind: ast::TupleVariantKind(Vec::new()),
       id: ast::DUMMY_NODE_ID,

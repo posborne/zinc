@@ -33,7 +33,7 @@ pub fn expr_int(cx: &ExtCtxt, n: i64) -> P<ast::Expr> {
 /// The name of the structure representing a register
 pub fn path_ident(cx: &ExtCtxt, path: &Vec<String>)
                       -> ast::Ident {
-  cx.ident_of(path.clone().connect("_").as_slice())
+  cx.ident_of(path.clone().connect("_").as_str())
 }
 
 
@@ -97,11 +97,11 @@ pub fn field_type_path(cx: &ExtCtxt, path: &Vec<String>,
     node::FieldType::EnumField { ref opt_name, ..} => {
       match opt_name {
         &Some(ref name) =>
-          cx.path_ident(span, cx.ident_of(name.as_slice())),
+          cx.path_ident(span, cx.ident_of(name.as_str())),
         &None => {
           let mut name = path.clone();
           name.push(field.name.node.clone());
-          cx.path_ident(span, cx.ident_of(name.connect("_").as_slice()))
+          cx.path_ident(span, cx.ident_of(name.connect("_").as_str()))
         }
       }
     },
@@ -142,5 +142,5 @@ pub fn getter_name(cx: &ExtCtxt, path: &Vec<String>) -> ast::Ident {
 }
 
 pub fn intern_string(cx: &ExtCtxt, s: String) -> token::InternedString {
-  token::get_ident(cx.ident_of(s.as_slice()))
+  token::get_ident(cx.ident_of(s.as_str()))
 }

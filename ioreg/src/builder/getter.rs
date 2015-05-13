@@ -142,19 +142,19 @@ fn build_impl(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
               fields: &Vec<node::Field>) -> P<ast::Item> {
   let getter_ty = utils::getter_name(cx, path);
   let new = build_new(cx, path);
-  let getters: Vec<P<ast::Method>> =
+  let getters: Vec<P<ast::Item>> =
     FromIterator::from_iter(
       fields.iter()
         .map(|field| build_field_get_fn(cx, path, reg, field)));
 
   let packed_ty = utils::reg_primitive_type(cx, reg)
     .expect("Unexpected non-primitive register");
-  let get_raw: P<ast::Method> = quote_method!(cx,
+  let get_raw: P<ast::Item> = quote_item!(cx,
     #[doc = "Get the raw value of the register."]
     pub fn raw(&self) -> $packed_ty {
       self.value
     }
-  );
+  ).unwrap();
 
   let it = quote_item!(cx,
     #[allow(dead_code)]
@@ -169,9 +169,9 @@ fn build_impl(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
 
 /// Build a getter for a field
 fn build_field_get_fn(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
-                      field: &node::Field) -> P<ast::Method>
+                      field: &node::Field) -> P<ast::Item>
 {
-  let fn_name = cx.ident_of(field.name.node.as_slice());
+  let fn_name = cx.ident_of(field.name.node.as_str());
   let field_ty: P<ast::Ty> =
     cx.ty_path(utils::field_type_path(cx, path, reg, field));
   let mask = utils::mask(cx, field);
@@ -189,22 +189,22 @@ fn build_field_get_fn(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
     let value = from_primitive(
       cx, reg, field,
       quote_expr!(cx, (self.value >> $shift) & $mask));
-    quote_method!(cx,
+    quote_item!(cx,
       $doc_attr
       pub fn $fn_name(&self) -> $field_ty {
         $value
       }
-    )
+    ).unwrap()
   } else {
     let shift = utils::shift(cx, Some(quote_expr!(cx, idx)), field);
     let value = from_primitive(
       cx, reg, field,
       quote_expr!(cx, (self.value >> $shift) & $mask));
-    quote_method!(cx,
+    quote_item!(cx,
       $doc_attr
       pub fn $fn_name(&self, idx: usize) -> $field_ty {
         $value
       }
-    )
+    ).unwrap()
   }
 }
