@@ -42,7 +42,7 @@ impl Builder {
     node::visit_reg(&*reg, &mut getter::BuildGetters::new(self, cx));
     node::visit_reg(&*reg, &mut register::BuildRegStructs::new(self, cx));
     node::visit_reg(&*reg, &mut union::BuildUnionTypes::new(self, cx));
-    //node::visit_reg(&*reg, &mut accessors::BuildAccessors::new(self, cx));
+    node::visit_reg(&*reg, &mut accessors::BuildAccessors::new(self, cx));
     self.items.clone()
   }
 
