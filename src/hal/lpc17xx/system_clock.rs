@@ -28,7 +28,7 @@ use core::option::Option::{self, Some, None};
 #[macro_use] mod wait_for;
 
 /// PLL clock source.
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub enum ClockSource {
   /// Internal resonator, 4MHz.
   Internal,
@@ -46,7 +46,7 @@ pub enum ClockSource {
 /// Fcco = (2 * m * Fin) / n
 /// Fcpu = Fcco / divisor
 /// ```
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct PLL0 {
   /// PLL multiplier.
   pub m: u8,
@@ -57,7 +57,7 @@ pub struct PLL0 {
 }
 
 /// MCU clock configuration.
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct Clock {
   /// Clocking source.
   pub source: ClockSource,

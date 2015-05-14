@@ -28,7 +28,7 @@ use self::Port::*;
 
 /// Available port names.
 #[allow(missing_docs)]
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub enum Port {
   PortA,
   PortB,
@@ -43,7 +43,7 @@ pub enum Port {
 
 /// Pin functions.
 #[allow(missing_docs)]
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub enum Function {
   GPIOIn      = 0,
   GPIOOut     = 1,
@@ -72,7 +72,7 @@ impl Port {
 ///
 /// This structure shouldn't be used directly, pinmap.rs, available via pin::map
 /// has all possible pin configurations.
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct PinConf {
   /// Pin port, mcu-specific.
   pub port: Port,

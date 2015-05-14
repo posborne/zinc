@@ -31,6 +31,7 @@ use core::marker::Copy;
 
 /// Configures the state of peripheral clock.
 #[allow(missing_docs)]
+#[derive(Clone, Copy)]
 pub enum PeripheralClock {
   // reserved = 0,
   TIM0Clock  = 1,
@@ -66,11 +67,9 @@ pub enum PeripheralClock {
   USBClock   = 31,
 }
 
-impl Copy for PeripheralClock {}
-
 /// Configures the divisor of peripheral clock based on core clock.
 #[allow(missing_docs)]
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub enum PeripheralDivisor {
   WDTDivisor     = 0,
   TIMER0Divisor  = 2,

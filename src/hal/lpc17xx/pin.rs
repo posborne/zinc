@@ -31,7 +31,7 @@ use self::Port::*;
 
 /// Available port names.
 #[allow(missing_docs)]
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub enum Port {
   Port0,
   Port1,
@@ -41,7 +41,7 @@ pub enum Port {
 }
 
 /// Pin functions (GPIO or up to three additional functions).
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone, Copy)]
 #[allow(missing_docs)]
 pub enum Function {
   Gpio         = 0,
@@ -50,10 +50,8 @@ pub enum Function {
   AltFunction3 = 3,
 }
 
-impl Copy for Function {}
-
 /// Structure to describe the location of a pin
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct Pin {
   /// Port the pin is attached to
   port: Port,

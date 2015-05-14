@@ -16,7 +16,7 @@
 macro_rules! ioreg_old(
   ($io:ident: $ty:ty, $($reg:ident),+) => (
     #[allow(non_snake_case)]
-    #[derive(Copy)]
+    #[derive(Clone, Copy)]
     pub struct $io {
       $(
         $reg: VolatileCell<$ty>,

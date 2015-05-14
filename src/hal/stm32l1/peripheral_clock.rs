@@ -28,6 +28,7 @@ pub use self::PeripheralClock::*;
 
 #[allow(missing_docs)]
 #[repr(u8)]
+#[derive(Clone)]
 pub enum BusAhb {
   GpioA,
   GpioB,
@@ -81,6 +82,7 @@ impl BusAhb {
 
 #[allow(missing_docs)]
 #[repr(u8)]
+#[derive(Clone)]
 pub enum BusApb1 {
   Tim2,
   Tim3,
@@ -144,6 +146,7 @@ impl Copy for BusApb1 {}
 
 #[allow(missing_docs)]
 #[repr(u8)]
+#[derive(Clone)]
 pub enum BusApb2 {
   SysCfg,
   Tim9,
@@ -185,6 +188,7 @@ impl Copy for BusApb2 {}
 ///
 /// This enum contains all available clocks from both AHB and APB.
 #[allow(missing_docs)]
+#[derive(Clone)]
 pub enum PeripheralClock {
   Ahb(BusAhb),
   Apb1(BusApb1),

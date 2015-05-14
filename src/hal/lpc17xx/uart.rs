@@ -40,6 +40,7 @@ use self::UARTPeripheral::*;
 
 /// Available UART peripherals.
 #[allow(missing_docs)]
+#[derive(Clone, Copy)]
 pub enum UARTPeripheral {
   UART0,
   UART2,
@@ -48,7 +49,7 @@ pub enum UARTPeripheral {
 
 /// UART word length.
 #[allow(missing_docs)]
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub enum WordLen {
   WordLen5bits = 0b00,
   WordLen6bits = 0b01,
@@ -71,7 +72,7 @@ impl WordLen {
 }
 
 /// Stop bits configuration.
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub enum StopBit {
   /// Single stop bit.
   StopBit1bit  = 0b0_00,
@@ -129,7 +130,7 @@ enum FIFOTriggerLevel {
 }
 
 /// Structure describing a UART instance.
-#[derive(Copy)]
+#[derive(Clone)]
 pub struct UART {
   reg: &'static reg::UART,
   clock: PeripheralClock,
@@ -152,8 +153,6 @@ impl UARTPeripheral {
     }
   }
 }
-
-impl Copy for UARTPeripheral {}
 
 impl UART {
   /// Create ans setup a UART.

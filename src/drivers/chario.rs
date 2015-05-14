@@ -69,7 +69,7 @@ pub mod test {
 
   use drivers::chario::CharIO;
 
-  #[derive(Copy)]
+  #[derive(Clone, Copy)]
   pub struct TestCharIOData {
     last_char: char,
     putc_calls: usize,

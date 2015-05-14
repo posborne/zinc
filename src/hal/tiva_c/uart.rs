@@ -28,7 +28,7 @@ use hal::uart;
 
 /// There are 8 UART instances in total
 #[allow(missing_docs)]
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub enum UartId {
   Uart0,
   Uart1,
@@ -41,7 +41,7 @@ pub enum UartId {
 }
 
 /// Structure describing a single UART
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub struct Uart {
   /// UART register interface
   regs: &'static reg::Uart,

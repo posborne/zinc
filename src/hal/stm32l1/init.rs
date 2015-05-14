@@ -32,6 +32,7 @@ use self::SystemClockSource::*;
 
 /// Phase-locked loop clock source.
 #[repr(u8)]
+#[derive(Clone)]
 pub enum PllClockSource {
   /// Takes base clock from HSI.
   PllSourceHSI = 0,
@@ -49,6 +50,7 @@ pub type PllDivisor = u8;
 
 /// Multi-speed internal clock divisor.
 #[repr(u8)]
+#[derive(Clone)]
 pub enum MsiSpeed {
   /// 65.536 kHz
   Msi65   = 0,
@@ -69,6 +71,7 @@ pub enum MsiSpeed {
 impl Copy for MsiSpeed {}
 
 /// System clock source.
+#[derive(Clone)]
 pub enum SystemClockSource {
   /// Multi-speed internal clock,
   SystemClockMSI(MsiSpeed),
@@ -108,6 +111,7 @@ impl Copy for SystemClockSource {}
 
 #[allow(missing_docs)]
 #[repr(u8)]
+#[derive(Clone)]
 pub enum McoSource {
   McoClockSystem = 1,
   McoClockHSI = 2,
@@ -121,6 +125,7 @@ pub enum McoSource {
 impl Copy for McoSource {}
 
 /// Microchip clock output configuration.
+#[derive(Clone)]
 pub struct McoConfig {
   /// MCO clock source
   source: McoSource,
@@ -131,6 +136,7 @@ pub struct McoConfig {
 impl Copy for McoConfig {}
 
 /// System clock configuration.
+#[derive(Clone)]
 pub struct ClockConfig {
   /// System clock source
   pub source : SystemClockSource,

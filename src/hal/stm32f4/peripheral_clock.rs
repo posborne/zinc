@@ -30,6 +30,7 @@ use self::PeripheralClock::*;
 ///
 /// This enum contains all available clocks from both AHB and APB.
 #[allow(missing_docs)]
+#[derive(Clone)]
 pub enum PeripheralClock {
   // AHB1
   GPIOAClock,

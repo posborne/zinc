@@ -19,7 +19,7 @@ pub use self::GpioDirection::*;
 pub use self::GpioLevel::*;
 
 /// GPIO direction.
-#[derive(Copy)]
+#[derive(Clone, Copy)]
 pub enum GpioDirection {
   /// Input mode.
   In,
@@ -28,7 +28,7 @@ pub enum GpioDirection {
 }
 
 /// Logic levels.
-#[derive(PartialEq, Copy)]
+#[derive(PartialEq, Clone, Copy)]
 pub enum GpioLevel {
   /// Logic low.
   Low,
