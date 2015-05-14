@@ -108,7 +108,7 @@ fn build_new(cx: &ExtCtxt, path: &Vec<String>) -> P<ast::ImplItem> {
 
 /// Given an `Expr` of the given register's primitive type, return
 /// an `Expr` of the field type
-fn from_primitive(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
+fn from_primitive(cx: &ExtCtxt, path: &Vec<String>, _: &node::Reg,
                   field: &node::Field, prim: P<ast::Expr>)
                   -> P<ast::Expr> {
   match field.ty.node {

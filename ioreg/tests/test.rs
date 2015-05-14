@@ -268,4 +268,17 @@ mod test {
     }
   );
   */
+
+  ioregs!(MULTI_TEST = {
+      0x100 => reg32 reg1[8] {
+          0..31 => field[32],
+      }
+  });
+
+  #[test]
+  fn multi_ok() {
+      let test: MULTI_TEST = zeroed_safe();
+      test.reg1[0].set_field(0, true);
+      assert_eq!(test.reg1[0].field(0), true);
+  }
 }
