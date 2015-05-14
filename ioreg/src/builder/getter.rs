@@ -139,10 +139,17 @@ fn from_primitive(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
                   })
                 ),
               guard: None,
-              body: body,
+              body: cx.expr_some(DUMMY_SP, body),
           };
           arms.push(arm);
       }
+      let wild_arm = ast::Arm {
+          attrs: vec!(),
+          pats: vec!(cx.pat_wild(DUMMY_SP)),
+          guard: None,
+          body: cx.expr_none(DUMMY_SP),
+      };
+      arms.push(wild_arm);
       let opt_expr = cx.expr_match(
           DUMMY_SP,
           prim,
