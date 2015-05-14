@@ -73,6 +73,7 @@ pub mod clock {
   }
 
   impl MOSCFreq {
+      /// Converts between the MOSCFreq enum and the u32 primitive
       pub fn from_u32(v: u32) -> Option<MOSCFreq> {
           use self::*;
 
@@ -82,18 +83,19 @@ pub mod clock {
               0x0B => Some(MOSCFreq::X6_0MHz),
               0x0C => Some(MOSCFreq::X6_144MHz),
               0x0D => Some(MOSCFreq::X7_3728MHz),
-              0x0D => Some(MOSCFreq::X8_0MHz),
-              0x0D => Some(MOSCFreq::X8_192MHz),
-              0x0D => Some(MOSCFreq::X10_0MHz),
-              0x0D => Some(MOSCFreq::X12_0MHz),
-              0x0D => Some(MOSCFreq::X12_288MHz),
-              0x0D => Some(MOSCFreq::X13_56MHz),
-              0x0D => Some(MOSCFreq::X14_318MHz),
-              0x0D => Some(MOSCFreq::X16_0MHz),
-              0x0D => Some(MOSCFreq::X16_384MHz),
-              0x0D => Some(MOSCFreq::X18MHz),
-              0x0D => Some(MOSCFreq::X20MHz),
-              0x0D => Some(MOSCFreq::X24MHz),
+              0x0E => Some(MOSCFreq::X8_0MHz),
+              0x0F => Some(MOSCFreq::X8_192MHz),
+              0x10 => Some(MOSCFreq::X10_0MHz),
+              0x11 => Some(MOSCFreq::X12_0MHz),
+              0x12 => Some(MOSCFreq::X12_288MHz),
+              0x13 => Some(MOSCFreq::X13_56MHz),
+              0x14 => Some(MOSCFreq::X14_318MHz),
+              0x15 => Some(MOSCFreq::X16_0MHz),
+              0x16 => Some(MOSCFreq::X16_384MHz),
+              0x17 => Some(MOSCFreq::X18MHz),
+              0x18 => Some(MOSCFreq::X20MHz),
+              0x19 => Some(MOSCFreq::X24MHz),
+              _ => None,
           }
       }
   }
