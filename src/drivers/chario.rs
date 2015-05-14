@@ -16,6 +16,7 @@
 //! Generic char output trait.
 
 use core::slice::SliceExt;
+use core::convert::AsRef;
 
 use core::mem::zeroed;
 
@@ -31,8 +32,8 @@ pub trait CharIO {
 
   /// Outputs a string.
   fn puts(&self, s: &str) {
-    let chars : &[u8] = s.as_slice().as_bytes();
-    for i in 0..s.len() {
+    let chars : &[u8] = s.as_ref();
+    for i in 0 .. chars.len() {
       let c : char = chars[i] as char;
       self.putc(c);
     }
