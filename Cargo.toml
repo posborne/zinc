@@ -3,6 +3,10 @@ name = "zinc"
 version = "0.1.0"
 authors = ["Zinc Developers <zinc@github.com>"]
 
+[lib]
+name = "zinc"
+crate-type = ["staticlib"]
+
 [dependencies.ioreg]
 path = "./ioreg"
 

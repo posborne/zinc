@@ -207,6 +207,7 @@ fn build_impl(cx: &ExtCtxt, path: &Vec<String>, reg: &node::Reg,
   ).unwrap());
 
   let it = quote_item!(cx,
+    #[allow(dead_code)]
     impl $getter_ty {
         $new
         $getters

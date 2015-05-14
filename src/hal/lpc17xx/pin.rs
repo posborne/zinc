@@ -22,7 +22,6 @@ on the package.
 
 use core::intrinsics::abort;
 use core::option::Option;
-use core::marker::Copy;
 
 use self::Port::*;
 
