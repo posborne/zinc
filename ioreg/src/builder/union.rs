@@ -171,6 +171,7 @@ impl<'a> BuildUnionTypes<'a> {
     let name = utils::path_ident(self.cx, path);
     // Registers are already sorted by parser
     let mut regs = regs.clone();
+    let mut regs2 = regs.clone();
     let padded_regs = PaddedRegsIterator::new(&mut regs);
     let fields =
       padded_regs.enumerate().map(|(n,r)| self.build_pad_or_reg(path, r, n));
@@ -179,8 +180,6 @@ impl<'a> BuildUnionTypes<'a> {
       ctor_id: None,
     };
     let mut attrs: Vec<ast::Attribute> = vec!(
-      utils::list_attribute(self.cx, "derive",
-                            vec!("Clone")),
       utils::list_attribute(self.cx, "allow",
                             vec!("non_camel_case_types",
                                  "dead_code",
@@ -200,7 +199,33 @@ impl<'a> BuildUnionTypes<'a> {
       vis: ast::Public,
       span: reg.name.span,
     });
+    let mut full_size: u64 = 0;
+    //FIXME(mcoffin) - We're making this iterator twice
+    let padded_regs2 = PaddedRegsIterator::new(&mut regs2);
+    padded_regs2.enumerate().map(|(_, rp)| {
+        full_size += match rp {
+            RegOrPadding::Reg(reg) => reg.ty.size(),
+            RegOrPadding::Pad(s) => s,
+        };
+    }).count();
+    let clone_impl = quote_item!(self.cx,
+        impl ::core::clone::Clone for $name {
+            fn clone(&self) -> Self {
+                let mut next: $name = unsafe {
+                    ::core::mem::uninitialized()
+                };
+                unsafe {
+                    let next_ptr: *mut $name = &mut next;
+                    ::core::intrinsics::copy(
+                        ::core::mem::transmute(self),
+                        next_ptr,
+                        $full_size as usize);
+                    return next;
+                }
+            }
+        }
+    ).unwrap();
     let copy_impl = quote_item!(self.cx, impl ::core::marker::Copy for $name {}).unwrap();
-    vec!(struct_item, copy_impl)
+    vec!(struct_item, clone_impl, copy_impl)
   }
 }
