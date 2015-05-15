@@ -37,5 +37,5 @@ libcompiler-rt ar archive, compiled for appropriate architecture.
 To build an application from apps/ use the following rake command:
 
 ```
-rake PLATFORM=<platform> build_all  # or build_<appname>
+PLATFORM=<platform> EXAMPLE_NAME=<appname> make build
 ```

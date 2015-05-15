@@ -1,6 +1,4 @@
 TARGET=thumbv7m-none-eabi
-PLATFORM=stm32f4
-EXAMPLE_NAME=blink_stm32f4
 OBJCOPY=arm-none-eabi-objcopy
 OBJDUMP=arm-none-eabi-objdump
 
