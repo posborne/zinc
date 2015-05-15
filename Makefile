@@ -22,7 +22,7 @@ clean:
 listing: $(EXAMPLE_NAME).lst
 
 $(EXAMPLE_FILE):
-	cargo rustc --example blink_stm32f4 --release --target=$(TARGET) --verbose -- -C link-args="$(LDFLAGS)"
+	cargo rustc --example $(EXAMPLE_NAME) --release --target=$(TARGET) --verbose -- -C link-args="$(LDFLAGS)"
 
 $(EXAMPLE_NAME).bin: $(EXAMPLE_FILE)
 	$(OBJCOPY) -O binary $< $@
