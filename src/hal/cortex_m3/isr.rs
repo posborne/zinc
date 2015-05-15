@@ -34,12 +34,9 @@ extern {
   fn isr_reserved_1();
 }
 
-// TODO(mcoffin) I removed "extern" here because it made no sense
-// and created assertion problems in rustc. It may have been necessary; i don't
-// really know what I'm doing with this.
 #[cfg(not(test))]
 #[no_mangle]
-pub unsafe fn isr_handler_wrapper() {
+pub unsafe extern fn isr_handler_wrapper() {
   asm!(".weak isr_nmi, isr_hardfault, isr_mmfault, isr_busfault
       .weak isr_usagefault, isr_svcall, isr_pendsv, isr_systick
       .weak isr_debugmon

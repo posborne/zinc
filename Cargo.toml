@@ -7,13 +7,6 @@ authors = ["Zinc Developers <zinc@github.com>"]
 name = "zinc"
 crate-type = ["lib"]
 
-[features]
-mcu_lpc17xx = []
-mcu_stm32f4 = []
-mcu_stm32l1 = []
-mcu_k20 = []
-mcu_tiva_c = []
-
 [dependencies.ioreg]
 path = "./ioreg"
 
