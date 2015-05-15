@@ -13,4 +13,4 @@ __STACK_BASE  = ORIGIN(ram) + LENGTH(ram);
 
 REGION_ALIAS("vectors", rom);
 
-INCLUDE ./src/zinc/hal/layout_common.ld
+INCLUDE ./src/hal/layout_common.ld

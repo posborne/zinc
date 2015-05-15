@@ -4,7 +4,7 @@ isr_reserved_1 = 0 - (__STACK_BASE + main + 1 + isr_nmi + 1 + isr_hardfault + 1)
 
 _data_load = LOADADDR(.data);
 
-INCLUDE ./src/zinc/hal/lpc17xx/iomem.ld
+INCLUDE ./src/hal/lpc17xx/iomem.ld
 
 ENTRY(main)
 
@@ -16,4 +16,4 @@ MEMORY
 
 REGION_ALIAS("vectors", rom);
 
-INCLUDE ./src/zinc/hal/layout_common.ld
+INCLUDE ./src/hal/layout_common.ld
