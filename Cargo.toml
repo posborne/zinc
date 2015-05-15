@@ -5,7 +5,14 @@ authors = ["Zinc Developers <zinc@github.com>"]
 
 [lib]
 name = "zinc"
-crate-type = ["staticlib"]
+crate-type = ["lib"]
+
+[features]
+mcu_lpc17xx = []
+mcu_stm32f4 = []
+mcu_stm32l1 = []
+mcu_k20 = []
+mcu_tiva_c = []
 
 [dependencies.ioreg]
 path = "./ioreg"
@@ -14,5 +21,5 @@ path = "./ioreg"
 version = "*"
 
 [[example]]
-name = "blink"
-path = "examples/app_blink.rs"
+name = "blink_stm32f4"
+path = "examples/app_blink_stm32f4.rs"

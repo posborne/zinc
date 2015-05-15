@@ -1,17 +1,19 @@
-#![feature(plugin, no_std, core)]
-#![crate_type="staticlib"]
+#![feature(no_std, core, start)]
 #![no_std]
-#![plugin(macro_platformtree)]
 
 extern crate core;
 extern crate zinc;
 
-#[no_mangle]
-#[allow(unused_variables)]
-#[allow(dead_code)]
-pub unsafe fn main() {
-  use zinc::hal::timer::Timer;
-  use zinc::hal::stm32f4::{pin, timer};
+use zinc::hal::timer::Timer;
+use zinc::hal::stm32f4::{pin, timer};
+
+#[start]
+fn start(_: isize, _: *const *const u8) -> isize {
+    main();
+    0
+}
+
+pub fn main() {
   zinc::hal::mem_init::init_stack();
   zinc::hal::mem_init::init_data();
 

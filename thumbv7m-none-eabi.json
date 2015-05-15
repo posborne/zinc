@@ -9,5 +9,8 @@
     "os": "none",
     "relocation-model": "static",
     "target-endian": "little",
-    "target-pointer-width": "32"
+    "target-pointer-width": "32",
+    "no-compiler-rt": true,
+    "linker": "arm-none-eabi-gcc",
+    "linker-is-gnu": true
 }

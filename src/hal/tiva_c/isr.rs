@@ -13,6 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//! ISR data for tiva_c
+
 use core::option::Option::{self, None};
 
 const ISRCOUNT: usize = 139;

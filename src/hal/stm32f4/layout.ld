@@ -1,7 +1,7 @@
 __STACK_BASE = 0x2001FFFF;
 _data_load = LOADADDR(.data);
 
-INCLUDE ./src/zinc/hal/stm32f4/iomem.ld
+INCLUDE ./src/hal/stm32f4/iomem.ld
 
 ENTRY(main)
 
@@ -15,4 +15,4 @@ MEMORY
 
 REGION_ALIAS("vectors", rom);
 
-INCLUDE ./src/zinc/hal/layout_common.ld
+INCLUDE ./src/hal/layout_common.ld
