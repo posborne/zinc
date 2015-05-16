@@ -1,8 +1,5 @@
-#![feature(plugin, no_std, core)]
-#![feature(asm)]
-#![crate_type="staticlib"]
+#![feature(no_std, core, start)]
 #![no_std]
-#![plugin(macro_platformtree)]
 
 extern crate core;
 extern crate zinc;
@@ -28,8 +25,6 @@ pub unsafe extern fn isr_systick() {
     }
 }
 
-#[no_mangle]
-#[allow(dead_code)]
 pub fn main() {
   zinc::hal::mem_init::init_stack();
   zinc::hal::mem_init::init_data();
@@ -50,4 +45,10 @@ pub fn main() {
       }
       wfi();
   }
+}
+
+#[start]
+fn start(_: isize, _: *const *const u8) -> isize {
+    main();
+    0
 }

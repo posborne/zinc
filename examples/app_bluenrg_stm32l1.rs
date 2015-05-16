@@ -1,7 +1,5 @@
-#![feature(plugin, no_std, core)]
-#![crate_type="staticlib"]
+#![feature(no_std, core, start)]
 #![no_std]
-#![plugin(macro_platformtree)]
 
 //! Sample application for BlueNRG communication over SPI in X-NUCLEO-IDB04A1
 //! extension board for NUCLEO-L152RE
@@ -14,6 +12,12 @@ use core::intrinsics::abort;
 // by the `write!` macro
 mod std {
   pub use core::fmt;
+}
+
+#[start]
+fn start(_: isize, _: *const *const u8) -> isize {
+    main();
+    0
 }
 
 //TODO(kvark): temporary `u8 -> str` conversion until #235 is resolved
@@ -42,7 +46,6 @@ fn map_byte(s: u8) -> (&'static str, &'static str) {
   (map_hex(s>>4), map_hex(s&0xF))
 }
 
-#[no_mangle]
 pub unsafe fn main() {
   use core::fmt::Write;
   use core::result::Result;

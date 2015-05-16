@@ -1,7 +1,5 @@
-#![feature(plugin, no_std, core)]
-#![crate_type="staticlib"]
+#![feature(no_std, core, start)]
 #![no_std]
-#![plugin(macro_platformtree)]
 
 extern crate core;
 extern crate zinc;
@@ -26,10 +24,7 @@ pub fn wait(ticks: u32) {
   }
 }
 
-#[no_mangle]
-#[allow(unused_variables)]
-#[allow(dead_code)]
-pub unsafe fn main() {
+pub fn main() {
   zinc::hal::mem_init::init_stack();
   zinc::hal::mem_init::init_data();
   watchdog::init(watchdog::State::Disabled);
@@ -45,4 +40,10 @@ pub unsafe fn main() {
     led1.set_low();
     wait(10);
   }
+}
+
+#[start]
+fn start(_: isize, _: *const *const u8) -> isize {
+    main();
+    0
 }

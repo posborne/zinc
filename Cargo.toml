@@ -26,6 +26,10 @@ name = "blink_k20_isr"
 path = "examples/app_blink_k20_isr.rs"
 
 [[example]]
+name = "blink_pt"
+path = "examples/app_blink_pt.rs"
+
+[[example]]
 name = "blink_stm32f4"
 path = "examples/app_blink_stm32f4.rs"
 
