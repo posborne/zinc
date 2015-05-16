@@ -14,9 +14,6 @@
 // limitations under the License.
 
 #![feature(core, rustc_private, plugin_registrar, quote)]
-#![crate_name="macro_platformtree"]
-#![crate_type="dylib"]
-
 
 extern crate platformtree;
 extern crate rustc;

@@ -87,7 +87,7 @@ pub fn with_parsed_tts<F>(src: &str, block: F)
   });
   let tts = cx.parse_tts(src.to_string());
 
-  let pt = Parser::new(&mut cx, tts.as_slice()).parse_platformtree();
+  let pt = Parser::new(&mut cx, tts.as_str()).parse_platformtree();
 
   block(&mut cx, failptr, pt);
 }

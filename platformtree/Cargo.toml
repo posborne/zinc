@@ -5,4 +5,4 @@ authors = ["Zinc Developers <zinc@github.com>"]
 
 [lib]
 name = "platformtree"
-crate-type = ["lib"]
+plugin = true
