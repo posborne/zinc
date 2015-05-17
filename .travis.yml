@@ -6,6 +6,7 @@ install:
     - sudo apt-get install gcc-arm-none-eabi
     - (mkdir -p ./rust)
     - (cd ./rust; wget -O rust.tar.gz https://github.com/rust-lang/rust/tarball/`rustc --version|awk '{sub(/\\(/, "", $3); print $3}'`; tar -zx --strip-components=1 -f rust.tar.gz)
+    - (sudo mkdir -p /home/travis/rust/lib/rustlib/$TARGET/lib)
     - (rustc -C opt-level=2 -Z no-landing-pads --target=$TARGET -g --out-dir . rust/src/libcore/lib.rs; sudo mv libcore.rlib /home/travis/rust/lib/rustlib/$TARGET/lib)
 script:
     - cargo build --target=$TARGET --verbose
