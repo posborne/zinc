@@ -160,6 +160,7 @@ mod test {
   use core::mem::zeroed;
   use core::cell::Cell;
   use core::ops::Fn;
+  use core::ops::Range;
 
   use drivers::chario::CharIO;
   use drivers::lcd::LCD;

@@ -116,16 +116,16 @@ mod test {
         }
       }", |cx, failed, pt| {
       let items = Builder::build(cx, pt)
-        .expect(format!("Unexpected failure on {}", line!()).as_slice())
+        .expect(format!("Unexpected failure on {}", line!()).as_str())
         .emit_items(cx);
 
       assert!(unsafe{*failed} == false);
-      assert!(items.len() == 3);
+      assert!(items.len() == 4);
 
       assert_equal_items(items[1].deref(), "
           #[no_mangle]
           #[allow(unused_variables)]
-          pub unsafe fn main() -> () {
+          pub unsafe fn platformtree_main() -> () {
             zinc::hal::mem_init::init_stack();
             zinc::hal::mem_init::init_data();
             {
