@@ -1,0 +1,33 @@
+STRIP=@STRIP@
+OBJCOPY=@OBJCOPY@
+OBJDUMP=@OBJDUMP@
+
+TARGET=@host@
+
+CARGO_ROOT=@srcdir@
+
+# Output directory
+EXAMPLE_DIR=$(CARGO_ROOT)/target/$(TARGET)/release/examples
+
+BIN_FILE=$(EXAMPLE_DIR)/$(EXAMPLE_NAME).bin
+LST_FILE=$(EXAMPLE_DIR)/$(EXAMPLE_NAME).lst
+EXAMPLE_FILE=$(EXAMPLE_DIR)/$(EXAMPLE_NAME)
+
+.PHONY: build clean listing
+build: $(BIN_FILE)
+
+clean:
+	cargo clean
+
+listing: $(LST_FILE)
+
+# FIXME(mcoffin): Make this target depend on all the crate deps
+$(EXAMPLE_FILE):
+	cd $(CARGO_ROOT)
+	cargo rustc --example $(EXAMPLE_NAME) --release --target=$(TARGET) --verbose
+
+$(BIN_FILE): $(EXAMPLE_FILE)
+	$(OBJCOPY) -o binary $< $@
+
+$(LST_FILE): $(EXAMPLE_FILE)
+	$(OBJDUMP) -D $< > $@

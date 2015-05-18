@@ -12,5 +12,12 @@
     "target-pointer-width": "32",
     "no-compiler-rt": true,
     "linker": "arm-none-eabi-gcc",
-    "linker-is-gnu": true
+    "linker-is-gnu": true,
+    "pre-link-args": [
+        "-mthumb",
+        "-lm",
+        "-lgcc",
+        "-mcpu=cortex-m3",
+        "-Tsrc/hal/lpc17xx/layout.ld"
+    ]
 }
