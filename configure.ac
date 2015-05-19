@@ -39,6 +39,7 @@ tgt_layout=e-m:e-p:32:32-i1:8:32-i8:8:32-i16:16:32-i64:64-v128:64:128-a:0:32-n32
 tgt_os=none
 tgt_endian=little
 tgt_ptr_width=32
+tgt_pre_link_args=\"-mthumb\",\ \"-lm\",\ \"-lgcc\",\ \"-mcpu=$tgt_cpu\"
 
 case $tgt_cpu in
 cortex-m3)
@@ -56,6 +57,7 @@ AC_SUBST(tgt_llvm_tgt, $tgt_llvm_tgt)
 AC_SUBST(tgt_os, $tgt_os)
 AC_SUBST(tgt_endian, $tgt_endian)
 AC_SUBST(tgt_ptr_width, $tgt_ptr_width)
+AC_SUBST(tgt_pre_link_args, $tgt_pre_link_args)
 
 rustc_version=$(rustc --version|awk '{sub(/\(/, "", $3); print $3}')
 

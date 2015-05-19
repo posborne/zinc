@@ -13,10 +13,9 @@
     "no-compiler-rt": true,
     "linker": "@CC@",
     "pre-link-args": [
-        "-mthumb",
-        "-lm",
-        "-lgcc",
-        "-mcpu=cortex-m3",
-        "-Tsrc/hal/lpc17xx/layout.ld"
+        @tgt_pre_link_args@,
+        "-L@srcdir@/src/hal/@MCU@",
+        "-L@srcdir@/src/hal",
+        "-T@srcdir@/src/hal/@MCU@/layout.ld"
     ]
 }
