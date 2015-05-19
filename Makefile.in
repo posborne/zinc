@@ -20,7 +20,7 @@ BIN_FILE=$(EXAMPLE_DIR)/$(EXAMPLE_NAME).bin
 LST_FILE=$(EXAMPLE_DIR)/$(EXAMPLE_NAME).lst
 EXAMPLE_FILE=$(EXAMPLE_DIR)/$(EXAMPLE_NAME)
 
-RUSTC_FLAGS=--target=$(TARGET) --out-dir=$(OUT_DIR) --cfg feature="$(MCU)" -C opt-level=2
+RUSTC_FLAGS=--target=$(TARGET) --out-dir=$(OUT_DIR) --cfg feature=\"$(MCU)\" -C opt-level=2
 
 .PHONY: build clean listing
 build: $(BIN_FILE)
