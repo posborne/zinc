@@ -38,5 +38,3 @@ pub mod spi;
 pub mod stack;
 pub mod timer;
 pub mod uart;
-
-pub mod isr;

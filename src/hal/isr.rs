@@ -16,7 +16,14 @@
 //! This file is not part of zinc crate, it is linked separately, alongside the
 //! ISRs for the platform.
 
+#![feature(core, asm, lang_items, no_std)]
+#![crate_name="isr"]
+#![crate_type="staticlib"]
+#![no_std]
+
 #![allow(missing_docs)]
+
+extern crate core;
 
 #[path="cortex_m3/isr.rs"] pub mod isr_cortex_m3;
 
@@ -28,3 +35,5 @@
 
 #[cfg(feature = "tiva_c")]
 #[path="tiva_c/isr.rs"] pub mod isr_tiva_c;
+
+#[path="../util/lang_items.rs"] mod lang_items;
