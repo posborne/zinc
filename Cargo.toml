@@ -14,11 +14,15 @@ stm32l1 = []
 k20 = []
 tiva_c = []
 
+[dependencies.core]
+git = "https://github.com/bharrisau/rust-libcore"
+
 [dependencies.ioreg]
 path = "./ioreg"
 
 [dependencies.rlibc]
-version = "*"
+git = "https://github.com/posborne/rlibc"
+branch = "test-libcore-dependency"
 
 [dev-dependencies.platformtree]
 path = "./platformtree"

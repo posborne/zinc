@@ -2148,7 +2148,7 @@ else
 fi
 
 
-host=$host
+host=$MCU
 
 CC=$GCC
 
@@ -2196,10 +2196,10 @@ esac
 # Set llvm target
 case $tgt_cpu in
 cortex-m3)
-	tgt_llvm_tgt=thumbv7em-none-eabi
+	tgt_llvm_tgt=thumbv7m-none-eabi
 	;;
 cortex-m4)
-	tgt_llvm_tgt=thumbv7m-none-eabi
+	tgt_llvm_tgt=thumbv7em-none-eabi
 	;;
 *)
 	as_fn_error $? "Unknown CPU $tgt_cpu" "$LINENO" 5
@@ -2232,7 +2232,7 @@ ac_config_files="$ac_config_files Makefile"
 
 
 if test -n "$host"; then
-	ac_config_files="$ac_config_files $host.json:target.json.in"
+	ac_config_files="$ac_config_files $MCU.json:target.json.in"
 
 fi
 
@@ -2955,7 +2955,7 @@ do
   case $ac_config_target in
     "libcore.rlib") CONFIG_COMMANDS="$CONFIG_COMMANDS libcore.rlib" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-    "$host.json") CONFIG_FILES="$CONFIG_FILES $host.json:target.json.in" ;;
+    "$MCU.json") CONFIG_FILES="$CONFIG_FILES $MCU.json:target.json.in" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

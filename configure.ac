@@ -8,7 +8,7 @@ AC_CHECK_TOOL(OBJCOPY, objcopy, :)
 AC_CHECK_TOOL(OBJDUMP, objdump, :)
 AC_CHECK_TOOL(AR, ar, :)
 
-AC_SUBST(host, $host)
+AC_SUBST(host, $MCU)
 AC_SUBST(CC, $GCC)
 
 AC_ARG_VAR(MCU, [MCU type])
@@ -54,10 +54,10 @@ esac
 # Set llvm target
 case $tgt_cpu in
 cortex-m3)
-	tgt_llvm_tgt=thumbv7em-none-eabi
+	tgt_llvm_tgt=thumbv7m-none-eabi
 	;;
 cortex-m4)
-	tgt_llvm_tgt=thumbv7m-none-eabi
+	tgt_llvm_tgt=thumbv7em-none-eabi
 	;;
 *)
 	AC_MSG_ERROR([Unknown CPU $tgt_cpu])
@@ -91,7 +91,7 @@ AC_CONFIG_COMMANDS([libcore.rlib],
 AC_CONFIG_FILES([Makefile])
 
 if test -n "$host"; then
-	AC_CONFIG_FILES([$host.json:target.json.in])
+	AC_CONFIG_FILES([$MCU.json:target.json.in])
 fi
 
 AC_OUTPUT
