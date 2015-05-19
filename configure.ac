@@ -1,10 +1,15 @@
 AC_INIT(zinc, 0.1)
 
+cross_compiling=yes
+
+AC_CHECK_TOOL(GCC, gcc, :)
 AC_CHECK_TOOL(STRIP, strip, :)
 AC_CHECK_TOOL(OBJCOPY, objcopy, :)
 AC_CHECK_TOOL(OBJDUMP, objdump, :)
+AC_CHECK_TOOL(AR, ar, :)
 
 AC_SUBST(host, $host)
+AC_SUBST(CC, $GCC)
 
 AC_ARG_VAR(MCU, [MCU type])
 
@@ -51,6 +56,21 @@ AC_SUBST(tgt_llvm_tgt, $tgt_llvm_tgt)
 AC_SUBST(tgt_os, $tgt_os)
 AC_SUBST(tgt_endian, $tgt_endian)
 AC_SUBST(tgt_ptr_width, $tgt_ptr_width)
+
+rustc_version=$(rustc --version|awk '{sub(/\(/, "", $3); print $3}')
+
+AC_CONFIG_COMMANDS([libcore.rlib],
+		   [mkdir -p rust]
+		   [pushd rust]
+		   [wget -O rust.tar.gz https://github.com/rust-lang/rust/tarball/$commit]
+		   [tar -zx --strip-components=1 -f rust.tar.gz]
+		   [ln -s ../$host.json $host.json]
+		   [rustc -C opt-level=2 -C ar=$tgt_ar -Z no-landing-pads --target $host -g src/libcore/lib.rs --out-dir ..]
+		   [popd],
+		   [tgt_llvm_tgt=$tgt_llvm_tgt]
+		   [commit=$rustc_version]
+		   [tgt_ar=$AR]
+		   [host=$host])
 
 AC_CONFIG_FILES([Makefile])
 

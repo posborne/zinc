@@ -1,5 +1,5 @@
 {
-    "arch": "@tgt_arch",
+    "arch": "@tgt_arch@",
     "cpu": "@tgt_cpu@",
     "data-layout": "@tgt_layout@",
     "disable-redzone": true,
