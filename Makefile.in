@@ -31,7 +31,7 @@ clean:
 listing: $(LST_FILE)
 
 # FIXME(mcoffin): Make this target depend on all the crate deps
-$(EXAMPLE_FILE): $(ISR_FILE)
+$(EXAMPLE_FILE):
 	cd $(CARGO_ROOT)
 	cargo rustc --example $(EXAMPLE_NAME) --release --target=$(TARGET) --verbose
 
