@@ -27,6 +27,10 @@ path = "./platformtree"
 path = "./macro_platformtree"
 
 [[example]]
+name = "nothing"
+path = "examples/app_nothing.rs"
+
+[[example]]
 name = "blink"
 path = "examples/app_blink.rs"
 
