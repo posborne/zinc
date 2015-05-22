@@ -17,7 +17,8 @@ EXAMPLE_FILE=$(EXAMPLE_DIR)/$(EXAMPLE_NAME)
 
 RUSTC_FLAGS=--target=$(TARGET) --out-dir=$(OUT_DIR) --cfg feature=\"$(MCU)\" -C opt-level=2
 
-.PHONY: build clean listing
+.PHONY: build clean listing $(EXAMPLE_FILE)
+
 build: $(BIN_FILE)
 
 clean:
@@ -25,7 +26,7 @@ clean:
 
 listing: $(LST_FILE)
 
-# FIXME(mcoffin): Make this target depend on all the crate deps
+# Target is PHONY so cargo can deal with dependencies
 $(EXAMPLE_FILE):
 	cd $(CARGO_ROOT)
 	cargo rustc --example $(EXAMPLE_NAME) --release --target=$(TARGET) --verbose --features $(MCU)
