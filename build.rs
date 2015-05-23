@@ -20,7 +20,7 @@ fn copy_linker_scripts<P: AsRef<Path>>(out_path: P) -> io::Result<()> {
 fn main() {
     let profile = env::var("PROFILE").unwrap();
     match profile.as_ref() {
-        "dev" | "release" => {},
+        "dev" | "release" | "debug" => {},
         _ => {
             return;
         },
