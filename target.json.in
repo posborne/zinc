@@ -14,8 +14,6 @@
     "linker": "@CC@",
     "pre-link-args": [
         @tgt_pre_link_args@,
-        "-L@abs_srcdir@/src/hal/@MCU@",
-        "-L@abs_srcdir@/src/hal",
-        "-T@abs_srcdir@/src/hal/@MCU@/layout.ld"
+        "-Tlayout.ld"
     ]
 }
