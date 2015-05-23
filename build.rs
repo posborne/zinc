@@ -3,9 +3,15 @@ use std::fs;
 use std::io;
 use std::path::Path;
 
+fn get_platform() -> String {
+    let features = env::vars().filter(|&(ref key, _)| key.starts_with("CARGO_FEATURE_"));
+    let (feature_var, _) = features.last().expect("No platform specified");
+    feature_var.trim_left_matches("CARGO_FEATURE_").to_string()
+}
+
 fn copy_linker_scripts<P: AsRef<Path>>(out_path: P) -> io::Result<()> {
     // Get the name of the MCU for which we're compiling
-    let target = env::var("TARGET").unwrap();
+    let target = get_platform();
 
     // Try copying the linker scripts
     let target_dir = Path::new("src/hal").join(&target);

@@ -15,19 +15,10 @@ stm32l1 = []
 k20 = []
 tiva_c = []
 
-[target.lpc17xx.dependencies.core]
+[target.thumbv7m-none-eabi.dependencies.core]
 git = "https://github.com/bharrisau/rust-libcore"
 
-[target.stm32f4.dependencies.core]
-git = "https://github.com/bharrisau/rust-libcore"
-
-[target.stm32l1.dependencies.core]
-git = "https://github.com/bharrisau/rust-libcore"
-
-[target.k20.dependencies.core]
-git = "https://github.com/bharrisau/rust-libcore"
-
-[target.tiva_c.dependencies.core]
+[target.thumbv7em-none-eabi.dependencies.core]
 git = "https://github.com/bharrisau/rust-libcore"
 
 [dependencies.ioreg]
