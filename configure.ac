@@ -27,5 +27,6 @@ esac
 AC_SUBST(TARGET, $platform_target)
 
 AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([.cargo/config:cargo_config.in])
 
 AC_OUTPUT
