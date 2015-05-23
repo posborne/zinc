@@ -18,6 +18,13 @@ fn copy_linker_scripts<P: AsRef<Path>>(out_path: P) -> io::Result<()> {
 }
 
 fn main() {
+    let profile = env::var("PROFILE").unwrap();
+    match profile.as_ref() {
+        "dev" | "release" => {},
+        _ => {
+            return;
+        },
+    }
     // Get output directory for cargo for zinc crate
     let out_dir = env::var("OUT_DIR").unwrap();
 
