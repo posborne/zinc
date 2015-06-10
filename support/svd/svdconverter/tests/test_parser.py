@@ -89,7 +89,7 @@ class TestParserFreescale(unittest.TestCase):
         self.assertEqual(lbkdie.bit_offset, 7)
         self.assertEqual(lbkdie.bit_width, 1)
         self.assertEqual(lbkdie.access, "read-write")
-        self.assertTrue(lbkdie.is_enumerated_type())
+        self.assertTrue(lbkdie.is_enumerated_type)
 
         enumerated_values = list(sorted([(e.name, e.description, e.value) for e in lbkdie.enumerated_values]))
         self.assertEqual(enumerated_values, [
