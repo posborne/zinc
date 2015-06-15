@@ -1,3 +1,4 @@
 # Uncomment to use cmsis_svd master from github:
 # -e 'git+https://github.com/posborne/cmsis-svd.git#egg=cmsis-svd&subdirectory=python'
 cmsis_svd
+click

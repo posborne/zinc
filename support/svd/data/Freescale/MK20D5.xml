@@ -9952,9 +9952,9 @@
               <access>read-write</access>
               <enumeratedValues>
                 <enumeratedValue>
-                  <name>0x</name>
+                  <name>0</name>
                   <description>Divide the system clock by 1.</description>
-                  <value>#0x</value>
+                  <value>#00</value>
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>10</name>
@@ -13541,9 +13541,9 @@
               <access>read-write</access>
               <enumeratedValues>
                 <enumeratedValue>
-                  <name>0x</name>
+                  <name>0</name>
                   <description>Divide the system clock by 1.</description>
-                  <value>#0x</value>
+                  <value>#00</value>
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>10</name>

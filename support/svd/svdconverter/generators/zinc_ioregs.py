@@ -20,11 +20,11 @@ ioregs!({{ peripheral.name }} @ {{ peripheral.base_address|hex }} = {  //! {{ pe
     # if not f.is_enumerated_type
     {{ f|bitrange }} => {{ f.name }} {{ f.access|convert_access }},  //= {{ f.description }}
     # else
-    {{ f|bitrange }} => {{ f.name }}{{ f.access|convert_access }} {  //! {{ f.description }}
+    {{ f|bitrange }} => {{ f.name }} {{ f.access|convert_access }} {  //! {{ f.description }}
       # for e in f.enumerated_values if not e.is_reserved
       {{ e.value }} => {{ e|enumkey }},  //= {{ e.description }}
       # endfor
-    }
+    },
     # endif
     # endfor
   },
@@ -38,6 +38,7 @@ ioregs!({{ peripheral.name }} @ {{ peripheral.base_address|hex }} = {  //! {{ pe
 def enumkey(enum):
     if re.match(r'^\d+$', enum.name):
         safe_name = "E_{}".format(enum.name)
+        return safe_name
 
         # Let's try to magically generate a name based on the description... This should be fun!
         generated_name = enum.description.upper()
@@ -68,13 +69,16 @@ def bitrange(field):
 
 
 def convert_access(access):
-    return {
-        "read-only": "ro",
-        "write-only": "wo",
-        "writeOnce": "wo",
-        "read-write": "rw",
-        "read-writeOnce": "rw",
-    }[access]
+    if access:
+        return ": {}".format({
+            "read-only": "ro",
+            "write-only": "wo",
+            "writeOnce": "wo",
+            "read-write": "rw",
+            "read-writeOnce": "rw",
+        }[access])
+    else:
+        return ""
 
 
 class ZincIoregsCodeGenerator(object):

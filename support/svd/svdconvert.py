@@ -1,24 +1,34 @@
 #!/usr/bin/env python
 import argparse
 import sys
+import click
 from cmsis_svd.parser import SVDParser
 from svdconverter.generators.zinc_ioregs import ZincIoregsCodeGenerator
 
 
-def build_arg_parser():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('path', help="Path to SVD XML File")
-    return parser
+@click.group("svdconvert")
+def svdconvert():
+    """Perform conversions from CMSIS SVD input files"""
 
 
-def main():
-    args = build_arg_parser().parse_args()
-    parser = SVDParser.for_xml_file(args.path)
+@svdconvert.command()
+@click.argument("path")
+@click.option("--output", "-o", default=None)
+def ioregs(path, output):
+    """Perform conversion to an ioregs register description module"""
+    parser = SVDParser.for_xml_file(path)
     device = parser.get_device()
-    generator = ZincIoregsCodeGenerator(device, sys.stdout)
+
+    # NOTE: output file will be closed when it goes out of scope and
+    # is garbage collected
+    if output is not None:
+        output_stream = open(output, "w")
+    else:
+        output_stream = sys.stdout
+
+    generator = ZincIoregsCodeGenerator(device, output_stream)
     generator.generate()
 
 
 if __name__ == '__main__':
-    main()
-
+    svdconvert()
